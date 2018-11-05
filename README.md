@@ -1,5 +1,9 @@
 ## Available Scripts
 
+Don't forget to install the dependencies using the:
+
+### `npm install`
+
 In the project directory, you can run:
 
 ### `npm start`

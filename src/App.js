@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import generateUsers from './mock/generateUsers';
-import { Header, Sidebar, User } from './components';
+import { Header, Sidebar, Content } from './components';
 
 import './App.scss';
 
@@ -10,7 +10,7 @@ class App extends Component {
     this.state = {
       loading: {},
       search: '',
-      layout: 'grid',
+      layout: 'list',
     };
     this.actions = {
       tabs: {
@@ -26,6 +26,7 @@ class App extends Component {
         archiveUser: this.archiveUser.bind(this),
       },
       changeLayout: this.changeLayout.bind(this),
+      search: this.search.bind(this),
     };
 
     this.tabsMapping = [
@@ -201,74 +202,10 @@ class App extends Component {
       <div className="page users">
         <Header />
         <Sidebar actions={this.actions.tabs} selectedTab={selectedTab} />
-        <content>
-          <header>
-            <h2>{selectedTab || 'All Users '}</h2>
-            <div className="options">
-              {layout === 'grid' && (
-                <span
-                  className="clickable fa fa-bars"
-                  role="none"
-                  onClick={() => {
-                    this.actions.changeLayout();
-                  }}
-                  onKeyDown={() => {
-                    this.actions.changeLayout();
-                  }}
-                />
-              )}
-              {layout === 'list' && (
-                <span
-                  className="clickable fa fa-th"
-                  role="none"
-                  onClick={() => {
-                    this.actions.changeLayout();
-                  }}
-                  onKeyDown={() => {
-                    this.actions.changeLayout();
-                  }}
-                />
-              )}
-
-              <span className="fa fa-cog" />
-              <span className="fa fa-ellipsis-v" />
-            </div>
-          </header>
-          <div className="container">
-            <div className="container-inner">
-              <div className="container-input">
-                <input
-                  type="text"
-                  placeholder="search"
-                  value={search}
-                  onChange={e => {
-                    this.search(e.target.value);
-                  }}
-                />
-                <i className="fa fa-search" />
-              </div>
-              {!loading.users && users ? (
-                <div className={`users ${layout}`}>
-                  {users.length > 0 ? (
-                    users.map(user => (
-                      <User
-                        user={user}
-                        key={user.id}
-                        actions={this.actions.user}
-                      />
-                    ))
-                  ) : (
-                    <div className="empty">No Results Found</div>
-                  )}
-                </div>
-              ) : (
-                <div className="loading">
-                  <p className="fas fa-circle-notch fa-spin" />
-                </div>
-              )}
-            </div>
-          </div>
-        </content>
+        <Content
+          data={{ layout, users, selectedTab, search, loading }}
+          actions={this.actions}
+        />
       </div>
     );
   }
